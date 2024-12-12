@@ -28,4 +28,4 @@ This project contains interview coding challenges.
       + Maria wins because there are no prime numbers left for Ben to choose.
     + Third round: `n = 1`
       + Ben wins because there are no prime numbers for Maria to choose.
-    + Result: *Ben* has the most wins.
+    + Result: *Ben* has the most wins
