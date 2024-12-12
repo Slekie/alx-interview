@@ -2,42 +2,27 @@
 """Prime game module.
 """
 
+
 def isWinner(x, nums):
-    """Determines the winner of a prime game session with `x` rounds
+    """Determines the winner of a prime game session with `x` rounds.
     """
-    def is_prime(num):
-        if num <= 1:
-            return False
-        for i in range(2, int(num**0.5) + 1):
-            if num % i == 0:
-                return False
-        return True
-
-    def play_round(n):
-        primes = [num for num in range(2, n + 1) if is_prime(num)]
-        player = 0  # 0 for Maria, 1 for Ben
-        while primes:
-            if not primes:
-                break
-            p = primes.pop(0)
-            for i in range(len(primes) - 1, -1, -1):
-                if primes[i] % p == 0:
-                    primes.pop(i)
-            player ^= 1
-        return player
-
-    maria_wins = 0
-    ben_wins = 0
-    for n in nums:
-        winner = play_round(n)
-        if winner == 0:
-            maria_wins += 1
-        else:
-            ben_wins += 1
-
-    if maria_wins > ben_wins:
-        return "Maria"
-    elif ben_wins > maria_wins:
-        return "Ben"
-    else:
+    if x < 1 or not nums:
         return None
+    marias_wins, bens_wins = 0, 0
+    # generate primes with a limit of the maximum number in nums
+    n = max(nums)
+    primes = [True for _ in range(1, n + 1, 1)]
+    primes[0] = False
+    for i, is_prime in enumerate(primes, 1):
+        if i == 1 or not is_prime:
+            continue
+        for j in range(i + i, n + 1, i):
+            primes[j - 1] = False
+    # filter the number of primes less than n in nums for each round
+    for _, n in zip(range(x), nums):
+        primes_count = len(list(filter(lambda x: x, primes[0: n])))
+        bens_wins += primes_count % 2 == 0
+        marias_wins += primes_count % 2 == 1
+    if marias_wins == bens_wins:
+        return None
+    return 'Maria' if marias_wins > bens_wins else 'Ben'
